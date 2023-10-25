@@ -1,33 +1,4 @@
- // Initialize the timer variable
- let seconds = 0;
-
- // Function to update the timer display
- function updateTimer() {
-     document.getElementById("timer").textContent = "Timer:" + seconds + " seconds";
- }
-
- // Function to start the timer
- function startTimer() {
-     timerInterval = setInterval(function() {
-         seconds++;
-         updateTimer();
-     }, 1000); // Update the timer every 1000 milliseconds (1 second)
- }
-
- // Function to stop the timer
- function stopTimer() {
-     clearInterval(timerInterval);
- }
-
- // Start the timer when the page loads
- startTimer();
- function changeQuestion() {
-    loadquiz();
-    startTimer();
-}
-
-// Set a timer to change the question after 10 seconds
-setTimeout(changeQuestion, 10000); 
+ 
 const quizData = [
     {
         question: "Grand Central Terminal, Park Avenue, New York is the world's",
@@ -72,8 +43,34 @@ const d_opt = document.getElementById("d_opt");
 const btn = document.getElementById("btn");
   let currentquiz=0;
   let score=0;
+  let timer=10;
+  loadquiz();
+  startTimer();
+  function startTimer() {
+    const timerElement = document.getElementById("timer");
+    const countdown = setInterval(function() {
+        timerElement.innerText = timer;
+        
+        
+        if (timer <= 0) {
+            currentquiz++;
+            if (currentquiz < quizData.length) {
+                clearInterval(countdown);
+                loadquiz();
+                startTimer(timer=10);
+            } else {
+              
+                quiz.innerHTML = `
+                    <h2>you have achieved ${score}/16 marks.</h2><br><br>
+                    
+                    <button onclick="location.reload()" style= "width:'100%'">Reload</button>
+                `;
+            }
+        }
+        timer--;
+        }, 1000);
+}
 
-loadquiz();
 var storedInput = localStorage.getItem("name");
 function loadquiz(){
     deselectAnswers();
@@ -83,6 +80,7 @@ function loadquiz(){
     b_opt.innerHTML = currentquizdata.b;
     c_opt.innerHTML = currentquizdata.c;
     d_opt.innerHTML = currentquizdata.d;
+    
 }
 
 function getSelected() {
